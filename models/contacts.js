@@ -1,25 +1,43 @@
-const mongoose = require("mongoose");
+const Contact = require('../models/contact');
 
-const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+const listContacts = async (obj, paginObj) => {
+  const contacts = await Contact.find(obj, '', paginObj);
+  return contacts;
+};
+
+const getContactById = async contactId => {
+  const contact = await Contact.findById(contactId);
+  if (!contact) {
+    return null;
   }
-});
+  return contact;
+};
 
-const Contact = mongoose.model("contact", contactSchema);
-module.exports = { Contact };
+const removeContact = async contactId => {
+  const result = await Contact.findByIdAndDelete(contactId);
+  return result;
+};
+
+const addContact = async body => {
+  const data = Contact.create(body);
+  return data;
+};
+
+const updateContact = async (contactId, body) => {
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  return result;
+};
+
+const updateStatusContact = async (contactId, body) => {
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  return result;
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updateStatusContact,
+};
