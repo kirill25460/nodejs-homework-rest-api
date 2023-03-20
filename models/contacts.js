@@ -1,26 +1,36 @@
-const { Contact } = require("./models");
+const Contact = require('../models/contact');
 
-const listContacts = async () => {
-  return await Contact.find();
+const listContacts = async (obj, paginObj) => {
+  const contacts = await Contact.find(obj, '', paginObj);
+  return contacts;
 };
 
-const getContactById = async (contactId) => {
-  return await Contact.findById(contactId);
+const getContactById = async contactId => {
+  const contact = await Contact.findById(contactId);
+  if (!contact) {
+    return null;
+  }
+  return contact;
 };
 
-const removeContact = async (contactId) => {
-  return await Contact.findByIdAndRemove({ _id: contactId });
+const removeContact = async contactId => {
+  const result = await Contact.findByIdAndDelete(contactId);
+  return result;
 };
 
-const addContact = async (body) => {
-  return await Contact.create(body);
+const addContact = async body => {
+  const data = Contact.create(body);
+  return data;
 };
 
 const updateContact = async (contactId, body) => {
-  console.log("123123123123123123pp");
-  return await Contact.findByIdAndUpdate({ _id: contactId }, body, {
-    new: true,
-  });
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  return result;
+};
+
+const updateStatusContact = async (contactId, body) => {
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  return result;
 };
 
 module.exports = {
@@ -29,4 +39,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
